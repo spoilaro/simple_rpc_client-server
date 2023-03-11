@@ -19,15 +19,25 @@ def fetch(client):
     print(data)
 
 
+def wiki(client):
+    topic = input("Search topic: ")
+
+    data = client.wiki(topic)
+
+    print(data)
+
+
 def main():
 
     s = xmlrpc.client.ServerProxy('http://localhost:8000')
     # Print list of available methods
 
-    choice = input('Fetch (f)/Save (s): ')
+    choice = input('Fetch (f)/Save (s)/ Wiki (w): ')
 
     if choice.lower() == "f":
         fetch(s)
+    elif choice.lower() == "w":
+        wiki(s)
     else:
         new(s)
 

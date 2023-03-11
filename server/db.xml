@@ -13,16 +13,10 @@
             <timestamp>fd</timestamp>
         </note>
     </topic>
-    <topic name="fd">
+    <topic name="Dog">
         <note>
-            <text>fd</text>
-            <timestamp>fd</timestamp>
-        </note>
-    <note><text>testi</text><timestamp>0000</timestamp></note></topic>
-    <topic name="gf">
-        <note>
-            <text>gf</text>
-            <timestamp>gf</timestamp>
+            <text>https://en.wikipedia.org/wiki/Dog</text>
+            <timestamp>11/03/2023 - 18:16:03</timestamp>
         </note>
     </topic>
 </data>

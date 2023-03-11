@@ -1,9 +1,11 @@
 from xmlrpc.server import SimpleXMLRPCServer
 from xmlrpc.server import SimpleXMLRPCRequestHandler
 import xml.etree.ElementTree as ET
+import requests as r
+import datetime
 
 
-tree = ET.parse('db.xml')
+tree = ET.parse('./server/db.xml')
 root = tree.getroot()
 
 # Restrict to a particular path.
@@ -75,9 +77,36 @@ def save_data(topic, text, timestamp):
 
         root.append(new_topic)
 
-        tree.write("db.xml")
+        tree.write("./server/db.xml")
 
     return 1
+
+
+def wiki_search(topic):
+
+    S = r.Session()
+
+    URL = "https://en.wikipedia.org/w/api.php"
+
+    PARAMS = {
+        "action": "opensearch",
+        "namespace": "0",
+        "search": topic,
+        "limit": "1",
+        "format": "json"
+    }
+
+    R = S.get(url=URL, params=PARAMS)
+    DATA = R.json()
+
+    print(DATA)
+
+    topic_link = DATA[3]
+
+    save_data(topic, topic_link[0], datetime.datetime.now().strftime(
+        "%d/%m/%Y - %H:%M:%S"))
+
+    return "SUCCESS"
 
 
 # Create server
@@ -94,6 +123,8 @@ with SimpleXMLRPCServer(('localhost', 8000),
     server.register_function(save_data, "save")
 
     server.register_function(get_data, "get")
+
+    server.register_function(wiki_search, "wiki")
 
     # Run the server's main loop
     server.serve_forever()
