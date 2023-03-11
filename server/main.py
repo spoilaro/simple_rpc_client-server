@@ -37,7 +37,7 @@ def get_data(topic):
 
         }
     else:
-        pass
+        return 0
 
 
 # Functions
@@ -61,7 +61,7 @@ def save_data(topic, text, timestamp):
         timestamp_elem = ET.SubElement(note, "timestamp")
         timestamp_elem.text = timestamp
 
-        tree.write("db.xml")
+        tree.write("./server/db.xml")
     else:
         # Case where topic given is not found from the database
         new_topic = ET.Element("topic")
