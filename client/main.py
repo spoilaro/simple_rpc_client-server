@@ -1,6 +1,14 @@
 import xmlrpc.client
 
 
+def parse_response(res):
+    if res == 1:
+        print("ERROR OCCURED")
+        exit(1)
+    else:
+        return res
+
+
 def new(client):
 
     topic = input("Topic: ")
@@ -14,7 +22,7 @@ def fetch(client):
 
     topic = input("Topic: ")
 
-    data = client.get(topic)
+    data = parse_response(client.get(topic))
 
     print(data)
 
@@ -22,7 +30,7 @@ def fetch(client):
 def wiki(client):
     topic = input("Search topic: ")
 
-    data = client.wiki(topic)
+    data = parse_response(client.wiki(topic))
 
     print(data)
 

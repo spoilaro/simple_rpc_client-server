@@ -5,10 +5,12 @@ import requests as r
 import datetime
 
 
-tree = ET.parse('./server/db.xml')
-root = tree.getroot()
-
-# Restrict to a particular path.
+try:
+    tree = ET.parse('./server/db.xml')
+    root = tree.getroot()
+except FileNotFoundError:
+    print("Could not find the db file: ./server/db.xml")
+    exit(1)
 
 
 class RequestHandler(SimpleXMLRPCRequestHandler):
@@ -37,10 +39,7 @@ def get_data(topic):
 
         }
     else:
-        return 0
-
-
-# Functions
+        return 1
 
 
 def save_data(topic, text, timestamp):
@@ -79,7 +78,7 @@ def save_data(topic, text, timestamp):
 
         tree.write("./server/db.xml")
 
-    return 1
+    return 0
 
 
 def wiki_search(topic):
@@ -106,7 +105,7 @@ def wiki_search(topic):
     save_data(topic, topic_link[0], datetime.datetime.now().strftime(
         "%d/%m/%Y - %H:%M:%S"))
 
-    return "SUCCESS"
+    return 0
 
 
 # Create server
@@ -114,17 +113,12 @@ with SimpleXMLRPCServer(('localhost', 8000),
                         requestHandler=RequestHandler) as server:
     server.register_introspection_functions()
 
-    # Register a function under a different name
-
-    def adder_function(x, y):
-        return x + y
-    server.register_function(adder_function, 'add')
-
     server.register_function(save_data, "save")
 
     server.register_function(get_data, "get")
 
     server.register_function(wiki_search, "wiki")
 
-    # Run the server's main loop
+    print("SERVER RUNNING, READY TO TAKE REQUESTS")
+
     server.serve_forever()
